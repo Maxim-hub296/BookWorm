@@ -1,6 +1,8 @@
-from django.views.generic import ListView
 
-from shop.models import Book, Genre
+
+from django.views.generic import ListView, DetailView
+
+from shop.models import Book, Genre, Comment
 
 
 # Create your views here.
@@ -69,4 +71,19 @@ class YearBookListView(ListView):
         context = super().get_context_data(**kwargs)
         # Добавляем данные для сайдбара
         Home().add_sidebar_data(context)
+        return context
+
+
+class SingleBookView(DetailView):
+    model = Book
+    context_object_name = 'book'
+    template_name = 'shop/book.html'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        comments = Comment.objects.filter(book=self.get_object())
+        context['comments'] = comments
+        context['genres'] = Genre.objects.filter(book=self.get_object())
         return context

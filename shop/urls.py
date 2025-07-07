@@ -10,6 +10,8 @@ urlpatterns = [
     path('genre/<slug:slug>/', views.GenreBookListView.as_view(), name='genres'),
     path('author/<str:author>/', views.AuthorBookListView.as_view(), name='authors'),
     path('year/<int:year>/', views.YearBookListView.as_view(), name='years'),
+    path('book/<slug:slug>/', views.SingleBookView.as_view(), name='book_detail'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
