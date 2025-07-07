@@ -1,8 +1,15 @@
 from django.urls import path
+from django.conf.urls.static import static
+from django.conf import settings
 
 from . import views
 
 app_name = 'shop'
 urlpatterns = [
-
+    path('', views.Home.as_view(), name='home'),
+    path('genre/<slug:slug>/', views.GenreBookListView.as_view(), name='genres'),
+    path('author/<str:author>/', views.AuthorBookListView.as_view(), name='authors'),
+    path('year/<int:year>/', views.YearBookListView.as_view(), name='years'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

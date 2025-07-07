@@ -1,3 +1,51 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.urls import reverse
+from django.utils.text import slugify
+
 
 # Create your models here.
+
+class Genre(models.Model):
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    author = models.CharField(max_length=100)
+    description = models.TextField()
+    year = models.PositiveIntegerField(
+        null=True,
+        validators=[
+            MinValueValidator(1000),
+            MaxValueValidator(2100)
+        ]
+    )
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    genres = models.ManyToManyField(Genre)
+    image = models.ImageField(
+        null=True,
+        upload_to='books/')
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('book_detail', args=[self.slug])
+
+    def __str__(self):
+        return self.title
+
+class Comment(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    content = models.TextField()
+
+    def __str__(self):
+        return f"Комментарий к книге {self.book.title}"

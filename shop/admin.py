@@ -1,3 +1,38 @@
 from django.contrib import admin
 
 # Register your models here.
+from django.contrib import admin
+from .models import Book, Genre
+
+class GenreAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug')  # Поля в списке
+    prepopulated_fields = {'slug': ('name',)}  # Автозаполнение slug
+
+class BookAdmin(admin.ModelAdmin):
+    list_display = ('title', 'display_genres')  # Показываем жанры в списке книг
+    filter_horizontal = ('genres',)  # Красивый виджет для выбора жанров
+    prepopulated_fields = {'slug': ('title',)}
+    # Метод для отображения жанров в списке книг
+    def display_genres(self, obj):
+        return ", ".join([genre.name for genre in obj.genres.all()])
+    display_genres.short_description = 'Жанры'
+
+
+from django.contrib import admin
+from .models import Comment
+
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('book', 'short_content')  # Добавьте created_at в модель, если нужно
+    list_filter = ('book',)
+    search_fields = ('content', 'book__title')
+
+    def short_content(self, obj):
+        return f"{obj.content[:50]}..." if len(obj.content) > 50 else obj.content
+
+    short_content.short_description = 'Комментарий'
+
+
+admin.site.register(Comment, CommentAdmin)
+admin.site.register(Genre, GenreAdmin)
+admin.site.register(Book, BookAdmin)
