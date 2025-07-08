@@ -1,94 +1,95 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-    <h1 class="my-4">Все книги</h1>
+    <div class="container">
 
-    <div class="row">
-        <!-- Основной контент - список книг -->
-        <div class="col-lg-9 order-lg-1 order-2">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-                {% for book in book_list %}
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        {% if book.image %}
-                        <img src="{{ book.image.url }}"
-                             class="card-img-top book-cover"
-                             alt="Обложка книги {{ book.title }}">
-                        {% else %}
-                        <div class="text-center py-5 bg-light">
-                            <i class="bi bi-book fs-1 text-muted"></i>
-                            <p class="mt-2">Нет обложки</p>
-                        </div>
-                        {% endif %}
+        <h1 class="my-4">Все книги </h1>
 
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <a href="{% url 'shop:book_detail' book.slug %}"
-                                   class="text-decoration-none text-dark">
-                                    {{ book.title }}
-                                </a>
-                            </h5>
+        <div class="row">
+            <!-- Основной контент - список книг -->
+            <div class="col-lg-9 order-lg-1 order-2">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                    {% for book in book_list %}
+                        <div class="col">
+                            <div class="card h-100 shadow-sm">
+                                {% if book.image %}
+                                    <img src="{{ book.image.url }}"
+                                         class="card-img-top book-cover"
+                                         alt="Обложка книги {{ book.title }}">
+                                {% else %}
+                                    <div class="text-center py-5 bg-light">
+                                        <i class="bi bi-book fs-1 text-muted"></i>
+                                        <p class="mt-2">Нет обложки</p>
+                                    </div>
+                                {% endif %}
 
-                            <div class="mt-3">
-                                <span class="fs-5 fw-bold">{{ book.price }} руб.</span>
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <a href="{% url 'shop:book_detail' book.slug %}"
+                                           class="text-decoration-none text-dark">
+                                            {{ book.title }}
+                                        </a>
+                                    </h5>
+
+                                    <div class="mt-3">
+                                        <span class="fs-5 fw-bold">{{ book.price }} руб.</span>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer bg-transparent border-0 pb-3">
+                                    <button class="btn btn-primary w-100">
+                                        В корзину
+                                    </button>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="card-footer bg-transparent border-0 pb-3">
-                            <button class="btn btn-primary w-100">
-                                В корзину
-                            </button>
+                    {% empty %}
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                Книги пока не добавлены в каталог
+                            </div>
                         </div>
-                    </div>
+                    {% endfor %}
                 </div>
-                {% empty %}
-                <div class="col-12">
-                    <div class="alert alert-info">
-                        Книги пока не добавлены в каталог
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
 
-            <!-- Пагинация -->
-            {% if is_paginated %}
-            <nav class="mt-5">
-                <ul class="pagination justify-content-center">
-                    {% if page_obj.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page=1">Первая</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
-                    </li>
-                    {% endif %}
+                <!-- Пагинация -->
+                {% if is_paginated %}
+                    <nav class="mt-5">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1">Первая</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+                                </li>
+                            {% endif %}
 
-                    <li class="page-item active">
+                            <li class="page-item active">
                         <span class="page-link">
                             Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
                         </span>
-                    </li>
+                            </li>
 
-                    {% if page_obj.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>
-            {% endif %}
-        </div>
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
 
-        <!-- Сайдбар с фильтрами -->
-        <div class="col-lg-3 order-lg-2 order-1 mb-4 mb-lg-0">
-            <div class="sidebar-sticky">
-                {% include 'inc/sidebar.html' %}
+            <!-- Сайдбар с фильтрами -->
+            <div class="col-lg-3 order-lg-2 order-1 mb-4 mb-lg-0">
+                <div class="sidebar-sticky">
+                    {% include 'inc/sidebar.html' %}
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

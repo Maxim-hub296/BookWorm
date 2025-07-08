@@ -1,7 +1,6 @@
-
-
+from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView
-
+from shop.forms import AddCommentForm
 from shop.models import Book, Genre, Comment
 
 
@@ -86,4 +85,21 @@ class SingleBookView(DetailView):
         comments = Comment.objects.filter(book=self.get_object())
         context['comments'] = comments
         context['genres'] = Genre.objects.filter(book=self.get_object())
+
+        if 'form' not in context:
+            context['form'] = AddCommentForm
         return context
+
+
+def add_comment(request, slug):
+    book = Book.objects.get(slug=slug)
+    if request.method == 'POST':
+        form = AddCommentForm(request.POST)
+        if form.is_valid():
+            comment = Comment(book=book, content=form['content'].value())
+            comment.user = request.user
+            comment.save()
+            return redirect('shop:single-book', slug=slug)
+
+    return render(request, 'shop/book.html', {'form': AddCommentForm, 'book': book,
+                                              'comments': Comment.objects.filter(book=book)}, )

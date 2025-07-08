@@ -11,6 +11,7 @@ urlpatterns = [
     path('author/<str:author>/', views.AuthorBookListView.as_view(), name='authors'),
     path('year/<int:year>/', views.YearBookListView.as_view(), name='years'),
     path('book/<slug:slug>/', views.SingleBookView.as_view(), name='book_detail'),
+    path('book/<slug:slug>/add_comment/', views.add_comment, name='add_comment'),
 
 ]
 
