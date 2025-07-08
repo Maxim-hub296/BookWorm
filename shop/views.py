@@ -1,12 +1,12 @@
+from django.db.models import Max
 from django.views.generic import ListView, DetailView
 from shop.forms import AddCommentForm
 from shop.models import Book, Genre, Comment
 from django.contrib.auth.decorators import login_required
-import logging
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
+from random import randint
 
-logger = logging.getLogger(__name__)
 
 
 # Create your views here.
@@ -17,6 +17,8 @@ class Home(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        context['random_book'] = Book.objects.order_by("?").first()
         self.add_sidebar_data(context)
         return context
 
