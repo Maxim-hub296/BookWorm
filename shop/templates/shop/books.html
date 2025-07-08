@@ -8,6 +8,7 @@
             <!-- Заголовок и кнопка случайной книги -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="my-4">Все книги</h1>
+                {% if random_book %}
                 <a href="{% url 'shop:book_detail' random_book.slug %}"
                    class="btn btn-primary d-flex align-items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -18,6 +19,7 @@
                     </svg>
                     Случайная книга
                 </a>
+                {% endif %}
             </div>
             <div class="row">
                 <!-- Основной контент - список книг -->

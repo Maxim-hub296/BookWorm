@@ -43,9 +43,9 @@
             <ul class="list-unstyled">
                 {% for author in authors %}
                 <li class="mb-2">
-                    <a href="{% url 'shop:authors' author %}"
+                    <a href="{% url 'shop:authors' author.slug %}"
                        class="text-decoration-none text-dark
-                              {% if request.resolver_match.kwargs.author == author %}fw-bold{% endif %}">
+                              {% if request.resolver_match.kwargs.author == author.slug %}fw-bold{% endif %}">
                         {{ author }}
                     </a>
                 </li>
