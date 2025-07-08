@@ -43,7 +43,7 @@ class Book(models.Model):
 
 class Comment(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    user =  models.ForeignKey(User, on_delete=models.CASCADE)
+    user =  models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     content = models.TextField()
 
     def __str__(self):

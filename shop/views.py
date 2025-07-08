@@ -1,7 +1,12 @@
-from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView
 from shop.forms import AddCommentForm
 from shop.models import Book, Genre, Comment
+from django.contrib.auth.decorators import login_required
+import logging
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib import messages
+
+logger = logging.getLogger(__name__)
 
 
 # Create your views here.
@@ -91,15 +96,31 @@ class SingleBookView(DetailView):
         return context
 
 
+@login_required
 def add_comment(request, slug):
-    book = Book.objects.get(slug=slug)
+    book = get_object_or_404(Book, slug=slug)
+
     if request.method == 'POST':
         form = AddCommentForm(request.POST)
-        if form.is_valid():
-            comment = Comment(book=book, content=form['content'].value())
-            comment.user = request.user
-            comment.save()
-            return redirect('shop:single-book', slug=slug)
 
-    return render(request, 'shop/book.html', {'form': AddCommentForm, 'book': book,
-                                              'comments': Comment.objects.filter(book=book)}, )
+        if form.is_valid():
+            # Правильное извлечение данных из формы
+            content = form.cleaned_data['content']
+
+            # Создаем и сохраняем комментарий
+            comment = Comment(
+                content=content,
+                book=book,
+                user=request.user
+            )
+            comment.save()
+
+            messages.success(request, 'Комментарий успешно добавлен!')
+            return redirect('shop:book_detail', slug=slug)
+        else:
+            # Добавляем сообщения об ошибках формы
+            for error in form.errors.values():
+                messages.error(request, error)
+
+    # Всегда редиректим обратно на страницу книги
+    return redirect('shop:book_detail', slug=slug)
