@@ -4,6 +4,7 @@ from shop.models import Book, Genre, Comment, Author
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
+from django.db.models import Q
 
 
 # Create your views here.
@@ -106,6 +107,30 @@ class SingleBookView(DetailView):
 
         if 'form' not in context:
             context['form'] = AddCommentForm
+        return context
+
+
+class BookSearchView(ListView):
+    template_name = 'shop/books.html'
+    context_object_name = 'book_list'
+    paginate_by = 10
+    model = Book
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q')
+
+        queryset = queryset.filter(
+            Q(title__icontains=search_query) |
+            Q(authors__name__icontains=search_query)
+        ).distinct()
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["search_query"] = self.request.GET.get('q', "")
+        Home().add_random_book(context)
+        Home().add_sidebar_data(context)
         return context
 
 
