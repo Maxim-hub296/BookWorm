@@ -3,8 +3,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from .forms import RegistrationForm
-from django.contrib.auth import authenticate, login, logout
-
+from django.contrib.auth import authenticate, login
+from cart.models import Cart
 
 
 class RegistrationView(CreateView):
@@ -17,10 +17,12 @@ class RegistrationView(CreateView):
         username = form.cleaned_data.get('username')
         messages.success(self.request, "Thank you for registering")
 
+
         user = authenticate(username=username, password=form.cleaned_data.get('password1'))
 
         if user is not None:
             login(self.request, user)
+            Cart.objects.create(user=user)
         return response
 
 class MyLoginView(LoginView):

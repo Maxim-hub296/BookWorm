@@ -5,7 +5,7 @@
                 <a class="navbar-brand fs-3 fw-bold" href="/">Bookworm</a>
 
                 <div class="d-flex align-items-center">
-                    <a href="/cart" class="btn btn-link text-decoration-none py-2">
+                    <a href="{% url 'cart:cart' request.user.cart.id %}" class="btn btn-link text-decoration-none py-2">
                         <span class="fs-5">Корзина</span>
                     </a>
                     <form method="post" action="{% url 'authentication:logout' %}" class="ms-2">

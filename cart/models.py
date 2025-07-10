@@ -14,19 +14,19 @@ class Cart(models.Model):
         cart_item, created = CartItem.objects.get_or_create(
             cart=self,
             book=book,
-            defaults={'quantity': quantity}
+            defaults={'quantity': int(quantity)}
         )
 
         if not created:
-            cart_item.quantity += quantity
+            cart_item.quantity += int(quantity)
             cart_item.save()
 
     def remove_item(self, book):
         CartItem.objects.filter(cart=self, book=book).delete()
 
 
-    def get_cart_sum(self):
-        return sum(item.price * item.quantity for item in self.items.all())
+    def get_sum(self):
+        return sum(item.get_book_sum() for item in self.items.all())
 
     def get_items(self):
         return self.items.all()
