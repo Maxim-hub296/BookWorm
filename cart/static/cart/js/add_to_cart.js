@@ -1,5 +1,21 @@
-const form = document.getElementById('cart-form');
+document.getElementById('minus').addEventListener('click', function () {
+    const quantityInput = document.getElementById('quantity');
+    let value = parseInt(quantityInput.value);
+    if (value > 1) {
+        quantityInput.value = value - 1;
+    }
+});
 
+document.getElementById('plus').addEventListener('click', function () {
+    const quantityInput = document.getElementById('quantity');
+    let value = parseInt(quantityInput.value);
+    if (value < 99) {
+        quantityInput.value = value + 1;
+    }
+})
+
+
+const form = document.getElementById('cart-form');
 form.addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -14,7 +30,16 @@ form.addEventListener('submit', function (e) {
             'X-CSRFToken': csrfToken
         },
         body: `book_id=${bookId}&quantity=${quantity}`
-    })
+    }).then(response => {
+        if (response.ok) {
+            alert("Товар добавлен в корзину");
+        } else {
+            alert("Ошибка при добавлении товара");
+        }
+    }).catch(error => {
+        console.error("Ошибка: ", error)
+        alert("Произошла ошибка");
+    });
 
-    alert("Товар добавлен в корзину")
+
 });

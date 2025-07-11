@@ -59,16 +59,16 @@
                             {% csrf_token %}
                             <input type="hidden" name="book_id" value="{{ book.id }}" id="book-id">
                             <div class="quantity-control">
-                                <button class="quantity-minus" onclick="changeQuantity('quantity', -1)">-</button>
+                                <button type="button" class="btn btn-outline-secondary px-3 py-1" id="minus">-</button>
                                 <input type="number"
                                        id="quantity"
                                        class="quantity-input"
                                        value="1"
                                        min="1"
-                                       max="10">
-                                <button class="quantity-plus" onclick="changeQuantity('quantity', 1)">+</button>
+                                       max="99">
+                                <button type="button" class="btn btn-outline-secondary px-3 py-1" id="plus">+</button>
                             </div>
-                            <button type="submit">В корзину</button>
+                            <button type="submit" class="btn btn-outline-secondary px-3 py-1" id="button-submit">В корзину</button>
                         </form>
 
 
@@ -142,20 +142,8 @@
         }
     </style>
 
-    <!-- Блок уведомления -->
-    <div id="cart-notification" class="alert alert-success mt-3" style="display:none;">
-        Книга добавлена в корзину!
-    </div>
 
 
-    <script src="{% static 'cart/js/add_to_cart.js' %}">
-        function changeQuantity(id, delta) {
-            const input = document.getElementById(id);
-            let newValue = parseInt(input.value) + delta;
-            if (newValue >= parseInt(input.min) && newValue <= parseInt(input.max)) {
-                input.value = newValue;
-            }
-        }
+    <script src="{% static 'cart/js/add_to_cart.js' %}?v1=1.1"></script>
 
-    </script>
 {% endblock %}
