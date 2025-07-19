@@ -1,0 +1,43 @@
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-light">
+        <h3 class="h5 mb-0">Добавить комментарий</h3>
+    </div>
+    <div class="card-body">
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'shop:add_comment' book.slug %}">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="id_text" class="form-label">Ваш комментарий</label>
+                <textarea
+                    name="content"
+                    id="id_text"
+                    class="form-control"
+                    rows="4"
+                    placeholder="Поделитесь вашим мнением о книге"
+                    required
+                >{% if form.text.value %}{{ form.text.value }}{% endif %}</textarea>
+
+                {% if form.text.errors %}
+                <div class="invalid-feedback d-block">
+                    {% for error in form.text.errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-send me-2"></i>Отправить
+            </button>
+        </form>
+        {% else %}
+        <div class="alert alert-info">
+            <p class="mb-2">Чтобы оставить комментарий, пожалуйста, войдите в систему.</p>
+            <a href="{% url 'login' %}?next={% url 'shop:book_detail' book.slug %}" class="btn btn-sm btn-primary">
+                <i class="bi bi-box-arrow-in-right me-1"></i>Войти
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>

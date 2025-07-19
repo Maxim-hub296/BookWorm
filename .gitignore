@@ -1,0 +1,28 @@
+# Файлы окружения и секреты
+.env
+*.env
+secrets.json
+
+# База данных SQLite
+*.sqlite3
+*.db
+
+# Питоновские кэш-файлы
+__pycache__/
+*.pyc
+
+# Статика/медиа (если не храните в репозитории)
+/media/
+/staticfiles/
+
+# Виртуальное окружение
+venv/
+.venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+
+# Системные файлы
+.DS_Store

@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container py-5">
+        <div class="row">
+            <!-- Обложка книги -->
+            <div class="col-md-5 mb-4 mb-md-0">
+                <div class="card shadow-sm">
+                    {% if book.image %}
+                        <img src="{{ book.image.url }}"
+                             class="card-img-top img-fluid"
+                             alt="Обложка книги {{ book.title }}">
+                    {% else %}
+                        <div class="text-center py-5 bg-light">
+                            <i class="bi bi-book fs-1 text-muted"></i>
+                            <p class="mt-2">Нет обложки</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Информация о книге -->
+            <div class="col-md-7">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h1 class="display-5 fw-bold mb-3">{{ book.title }}</h1>
+
+                        <div class="mb-4">
+                            <h2 class="h4 text-muted mb-3">Автор</h2>
+                            <p class="fs-5">{{ book.author }}</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h2 class="h4 text-muted mb-3">Жанры</h2>
+                            <div class="d-flex flex-wrap gap-2">
+                                {% for genre in book.genres.all %}
+                                    <a href="{% url 'shop:genres' genre.slug %}"
+                                       class="badge text-decoration-none"
+                                       style="background-color: var(--button-background); color: var(--button-text);">
+                                        {{ genre.name }}
+                                    </a>
+                                {% empty %}
+                                    <span class="text-muted">Жанры не указаны</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h2 class="h4 text-muted mb-3">Год выпуска</h2>
+                            <p class="fs-5">{{ book.year|default:"Не указан" }}</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h2 class="h4 text-muted mb-3">Описание</h2>
+                            <p class="fs-5">{{ book.description }}</p>
+                        </div>
+
+                        <form id="cart-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="book_id" value="{{ book.id }}" id="book-id">
+                            <div class="quantity-control">
+                                <button type="button" class="btn btn-outline-secondary px-3 py-1" id="minus">-</button>
+                                <input type="number"
+                                       id="quantity"
+                                       class="quantity-input"
+                                       value="1"
+                                       min="1"
+                                       max="99">
+                                <button type="button" class="btn btn-outline-secondary px-3 py-1" id="plus">+</button>
+                            </div>
+                            <button type="submit" class="btn btn-outline-secondary px-3 py-1" id="button-submit">В корзину</button>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Комментарии -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h2 class="h4 mb-0">Комментарии</h2>
+                    </div>
+                    <div class="card-body">
+                        {% for comment in comments %}
+                            <div class="mb-4 pb-3 border-bottom">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center"
+                                         style="width: 40px; height: 40px;">
+                                        <i class="bi bi-person-fill text-light"></i>
+                                    </div>
+
+                                </div>
+                                <p class="mb-0">{{ comment.content }}</p>
+                            </div>
+                        {% empty %}
+                            <div class="text-center py-4">
+                                <i class="bi bi-chat-left-text fs-1 text-muted"></i>
+                                <p class="mt-2">Пока нет комментариев</p>
+                            </div>
+                        {% endfor %}
+
+                        {% include 'inc/add_commentary.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Кастомные стили для страницы книги */
+        .card {
+            border: 1px solid var(--card-border);
+            background-color: var(--card-background);
+        }
+
+        .card-header {
+            background-color: var(--navbar-background);
+            color: var(--navbar-link-text);
+        }
+
+        .btn-primary {
+            background-color: var(--button-background);
+            border-color: var(--button-background);
+            color: var(--button-text);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-hover-background);
+            border-color: var(--button-hover-background);
+        }
+
+        .border-top {
+            border-top: 1px solid var(--card-border) !important;
+        }
+
+        .border-bottom {
+            border-bottom: 1px solid var(--card-border) !important;
+        }
+    </style>
+
+
+
+    <script src="{% static 'cart/js/add_to_cart.js' %}?v1=1.1"></script>
+
+{% endblock %}

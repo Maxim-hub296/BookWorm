@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0" style="background-color: var(--card-background); border: 2px solid var(--card-border);">
+                <div class="card-header bg-transparent border-0 text-center py-4">
+                    <div class="d-flex justify-content-center mb-3">
+                        <div class="confetti-animation">
+                            <i class="bi bi-stars display-1 text-warning"></i>
+                        </div>
+                    </div>
+                    <h1 class="display-4 fw-bold text-primary mb-0">УРА! ВАШ ЗАКАЗ УЛЕТЕЛ В ДЕМО-КОСМОС!</h1>
+                </div>
+                
+                <div class="card-body px-4 px-md-5 py-4">
+                    <div class="letter-container">
+                        <div class="letter-header mb-4">
+                            <p class="text-muted mb-1">Дорогой со-испытатель,</p>
+                        </div>
+                        
+                        <div class="letter-content">
+                            <p class="fs-5 mb-4">
+                                Это нажатие кнопки – для меня гораздо больше, чем код. Это финальный аккорд в симфонии, которую я писал(а) ночами, вдохновляясь шелестом страниц (пусть пока и виртуальных).
+                            </p>
+                            
+                            <div class="highlight-box p-4 mb-4 rounded" style="background-color: rgba(128, 206, 255, 0.1); border-left: 4px solid var(--button-background);">
+                                <p class="fs-5 mb-0">
+                                    <i class="bi bi-lightning-charge-fill me-2 text-warning"></i>
+                                    Я безумно горжусь этим магазином. Каждая строчка кода – это кирпичик в моём книжном замке, и видеть, как вы в него "зашли"... Это волшебство! Ваше действие – как первые аплодисменты после долгих репетиций.
+                                </p>
+                            </div>
+                            
+                            <h3 class="h4 mt-5 mb-3" style="color: var(--heading-text);">
+                                <i class="bi bi-magic me-2"></i>
+                                Что теперь? Магия в действии!
+                            </h3>
+                            
+                            <p class="fs-5 mb-4">
+                                Ваши книги уже "упакованы" в облака фантазии, а наш невидимый курьер-демон (с опытом работы в параллельных мирах) уже мчится по цифровому эфиру. Оплата? Оплачена щедростью вашего любопытства!
+                            </p>
+                            
+                            <div class="secret-note p-4 mb-4 position-relative rounded" style="background-color: rgba(255, 255, 255, 0.8); border: 1px dashed var(--button-background);">
+                                <div class="secret-icon position-absolute top-0 start-0 translate-middle">
+                                    <i class="bi bi-key-fill fs-4 text-muted"></i>
+                                </div>
+                                <p class="fs-5 mb-0 fst-italic">
+                                    Но по секрету:<br>
+                                    Я жду не дождусь, когда эти полки наполнятся настоящими историями для настоящих книголюбов – вроде вас!
+                                </p>
+                            </div>
+                            
+                            <div class="feedback-box p-4 mb-4 rounded" style="background-color: var(--page-background);">
+                                <h3 class="h4 mb-3" style="color: var(--heading-text);">
+                                    <i class="bi bi-chat-left-text me-2"></i>
+                                    Ваши мысли – мой самый ценный код:
+                                </h3>
+                                <p class="fs-5 mb-0">
+                                    Нашли баг? Есть идея? Просто хотите сказать "Привет!"? Пишите! Я здесь, открыт и очень благодарен за ваше участие в этой "премьере".
+                                </p>
+                                <div class="d-flex align-items-center mt-3">
+                                    <i class="bi bi-telegram fs-4 me-2 text-primary"></i>
+                                    <span class="fs-5 fw-medium">Я в Telegram: @Wanderer2754</span>
+                                </div>
+                            </div>
+                            
+                            <p class="fs-5 mb-4">
+                                Спасибо, что стали частью моей истории!<br>
+                                Без вас эта глава была бы куда менее вдохновляющей.
+                            </p>
+                        </div>
+                        
+                        <div class="letter-signature mt-5 pt-4 border-top">
+                            <p class="mb-1">С теплом и книжной пылью (пока виртуальной),</p>
+                            <p class="fw-bold fs-4 mb-0" style="color: var(--heading-text);">Максим, магазин BookWorm</p>
+                            <p class="text-muted mt-3">
+                                <i class="bi bi-patch-exclamation-fill me-1"></i>
+                                P.S. Если вдруг реальная книга таки прилетела – считайте, что это не баг, а бета-тест волшебства!
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-5 pt-3">
+                        <a href="{% url 'shop:home' %}" class="btn btn-primary btn-lg px-5 py-3">
+                            <i class="bi bi-house-door me-2"></i>Вернуться в книжную галактику
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .confetti-animation {
+        animation: confetti 2s ease infinite;
+    }
+    
+    @keyframes confetti {
+        0% { transform: translateY(0) rotate(0); }
+        25% { transform: translateY(-15px) rotate(10deg); }
+        50% { transform: translateY(0) rotate(0); }
+        75% { transform: translateY(-10px) rotate(-10deg); }
+        100% { transform: translateY(0) rotate(0); }
+    }
+    
+    .letter-container {
+        position: relative;
+        padding: 2rem;
+        background-color: var(--page-background);
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    .letter-header {
+        position: relative;
+        padding-bottom: 1rem;
+    }
+    
+    .letter-header::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--button-background), var(--button-hover-background));
+        border-radius: 3px;
+    }
+    
+    .highlight-box {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .secret-note {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .secret-icon {
+        background-color: var(--page-background);
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .feedback-box {
+        position: relative;
+        border: 1px solid var(--card-border);
+        border-radius: 8px;
+    }
+    
+    .letter-signature {
+        position: relative;
+    }
+    
+    .letter-signature::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--button-background), transparent);
+    }
+    
+    .btn-primary {
+        background-color: var(--button-background);
+        border-color: var(--button-background);
+        color: var(--button-text);
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+    
+    .btn-primary:hover {
+        background-color: var(--button-hover-background);
+        border-color: var(--button-hover-background);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    @media (max-width: 768px) {
+        .display-4 {
+            font-size: 2.2rem;
+        }
+        
+        .letter-container {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,58 @@
+<div class="card mb-4 shadow-sm">
+    <div class="card-header fw-bold">Фильтры</div>
+    <div class="card-body">
+        <!-- Фильтр по жанрам -->
+        <div class="mb-4">
+            <h5 class="mb-3">Жанры</h5>
+            <ul class="list-unstyled">
+                {% for genre in genres %}
+                <li class="mb-2">
+                    <a href="{% url 'shop:genres' genre.slug %}"
+                       class="text-decoration-none text-dark
+                              {% if request.path|slice:'7:' == genre.slug %}fw-bold{% endif %}">
+                        {{ genre.name }}
+                    </a>
+                </li>
+                {% empty %}
+                <li class="text-muted">Жанры не найдены</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Фильтр по годам -->
+        <div class="mb-4">
+            <h5 class="mb-3">Год выпуска</h5>
+            <ul class="list-unstyled">
+                {% for year in years %}
+                <li class="mb-2">
+                    <a href="{% url 'shop:years' year %}"
+                       class="text-decoration-none text-dark
+                              {% if request.resolver_match.kwargs.year == year|stringformat:'s' %}fw-bold{% endif %}">
+                        {{ year }}
+                    </a>
+                </li>
+                {% empty %}
+                <li class="text-muted">Годы не найдены</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Фильтр по авторам -->
+        <div>
+            <h5 class="mb-3">Авторы</h5>
+            <ul class="list-unstyled">
+                {% for author in authors %}
+                <li class="mb-2">
+                    <a href="{% url 'shop:authors' author.slug %}"
+                       class="text-decoration-none text-dark
+                              {% if request.resolver_match.kwargs.author == author.slug %}fw-bold{% endif %}">
+                        {{ author }}
+                    </a>
+                </li>
+                {% empty %}
+                <li class="text-muted">Авторы не найдены</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>

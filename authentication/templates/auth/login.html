@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход | Bookworm</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --page-background: #FFFFFF;
+            --primary-text: #495057;
+            --heading-text: #212529;
+            --navbar-background: #80CEFF;
+            --navbar-link-text: #212529;
+            --card-background: #E5F4FF;
+            --card-border: #80CEFF;
+            --button-background: #80CEFF;
+            --button-text: #212529;
+            --button-hover-background: #A8E0FF;
+            --footer-background: #F8F9FA;
+            --footer-text: #6C757D;
+            --error-alert: #f8d7da;
+            --error-text: #721c24;
+        }
+
+        body {
+            background-color: var(--page-background);
+            color: var(--primary-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: linear-gradient(135deg, rgba(229, 244, 255, 0.3) 0%, rgba(255, 255, 255, 0.8) 100%);
+        }
+
+        .login-container {
+            max-width: 500px;
+            width: 100%;
+            margin: auto;
+            padding: 2rem;
+        }
+
+        .login-card {
+            background-color: var(--card-background);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #80CEFF, #A8E0FF, #80CEFF);
+            background-size: 200% 200%;
+            animation: gradient 3s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--heading-text);
+            margin-bottom: 1rem;
+        }
+
+        .login-title {
+            color: var(--heading-text);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            color: var(--primary-text);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--heading-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 0.75rem 0.75rem 0.75rem 45px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--button-background);
+            box-shadow: 0 0 0 0.25rem rgba(128, 206, 255, 0.25);
+        }
+
+        .btn-primary {
+            background-color: var(--button-background);
+            border-color: var(--button-background);
+            color: var(--button-text);
+            font-weight: 500;
+            padding: 0.75rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-hover-background);
+            border-color: var(--button-hover-background);
+            transform: translateY(-2px);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .form-footer a {
+            color: var(--heading-text);
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+            color: #0d6efd;
+        }
+
+        .form-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            z-index: 2;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .alert-danger {
+            background-color: var(--error-alert);
+            border-color: #f5c2c7;
+            color: var(--error-text);
+            border-radius: 5px;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 8px;
+        }
+
+        .social-login {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .social-divider {
+            position: relative;
+            margin: 1.5rem 0;
+            text-align: center;
+            color: #6c757d;
+        }
+
+        .social-divider::before,
+        .social-divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background-color: #dee2e6;
+        }
+
+        .social-divider::before {
+            left: 0;
+        }
+
+        .social-divider::after {
+            right: 0;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 1rem;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #dee2e6;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">
+                    <i class="bi bi-book"></i>
+                    <span>Bookworm</span>
+                </div>
+                <h2 class="login-title">С возвращением!</h2>
+                <p class="login-subtitle">Войдите, чтобы продолжить свое путешествие в мир книг</p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-circle me-2"></i>Неверное имя пользователя или пароль
+                    </div>
+                {% endif %}
+
+                <!-- Поле имени пользователя -->
+                <div class="mb-4">
+                    <label for="username" class="form-label">Имя пользователя</label>
+                    <div class="input-group">
+                        <i class="bi bi-person form-icon"></i>
+                        <input type="text" name="username" id="username" class="form-control" required placeholder="Введите ваше имя пользователя">
+                    </div>
+                </div>
+
+                <!-- Поле пароля -->
+                <div class="mb-4">
+                    <label for="password" class="form-label">Пароль</label>
+                    <div class="input-group">
+                        <i class="bi bi-lock form-icon"></i>
+                        <input type="password" name="password" id="password" class="form-control" required placeholder="Введите ваш пароль">
+                        <button type="button" class="password-toggle" id="passwordToggle">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+
+                <button type="submit" class="btn btn-primary w-100 py-2">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Войти
+                </button>
+            </form>
+
+
+
+            <div class="form-footer">
+                <p>Еще нет аккаунта? <a href="{% url 'authentication:register' %}">Зарегистрироваться</a></p>
+                <p>© 2025 Bookworm. Все права защищены</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Переключение видимости пароля
+        document.getElementById('passwordToggle').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        });
+
+        // Анимация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginCard = document.querySelector('.login-card');
+            loginCard.style.opacity = '0';
+            loginCard.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                loginCard.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                loginCard.style.opacity = '1';
+                loginCard.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
