@@ -1,24 +1,29 @@
 <header>
     <nav class="navbar navbar-expand-lg shadow-sm">
         <div class="container">
-            {% if user.is_authenticated %}
-                <a class="navbar-brand fs-3 fw-bold" href="/">Bookworm</a>
+            <a class="navbar-brand fs-3 fw-bold" href="{% url 'shop:home' %}">Bookworm</a>
 
+            {% if user.is_authenticated %}
+                <!-- Блок для авторизованных пользователей -->
                 <div class="d-flex align-items-center">
-                    <a href="{% url 'cart:cart' request.user.cart.id %}" class="btn btn-link text-decoration-none py-2">
-                        <span class="fs-5">Корзина</span>
-                    </a>
+                    {% if user.cart %}
+                        <!-- Ссылка на корзину, если корзина существует -->
+                        <a href="{% url 'cart:cart' user.cart.id %}" class="btn btn-link text-decoration-none py-2">
+                            <span class="fs-5">Корзина</span>
+                        </a>
+                    {% else %}
+                        <!-- Заглушка или скрытие, если корзины нет -->
+                        <span class="btn btn-link text-muted py-2">Корзина не найдена</span>
+                    {% endif %}
+
+                    <!-- Кнопка выхода -->
                     <form method="post" action="{% url 'authentication:logout' %}" class="ms-2">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-primary">
-                            Выход
-                        </button>
+                        <button type="submit" class="btn btn-primary">Выход</button>
                     </form>
                 </div>
             {% else %}
-
-                <a class="navbar-brand fs-3 fw-bold" href="{% url 'shop:home' %}">Bookworm</a>
-
+                <!-- Блок для НЕавторизованных пользователей -->
                 <div class="d-flex">
                     <a href="{% url 'authentication:login' %}" class="btn btn-link text-decoration-none py-2">
                         <span class="fs-5">Войти</span>

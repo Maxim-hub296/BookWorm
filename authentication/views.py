@@ -22,7 +22,7 @@ class RegistrationView(CreateView):
 
         if user is not None:
             login(self.request, user)
-            Cart.objects.create(user=user)
+            Cart.objects.get_or_create(user=user)
         return response
 
     def form_invalid(self, form):
@@ -31,6 +31,7 @@ class RegistrationView(CreateView):
 class MyLoginView(LoginView):
     template_name = "auth/login.html"
     redirect_authenticated_user = True
+
 
     def get_success_url(self):
         messages.success(self.request, "You have successfully logged in")
