@@ -1,4 +1,6 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
+from rest_framework import generics
 
 from .serializers import BookSerializer, AuthorSerializer, GenreSerializer, YearSerializer
 from shop.models import Book, Author, Genre
@@ -20,3 +22,29 @@ class GenresViewSet(viewsets.ModelViewSet):
 class YearViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Book.objects.values('year').distinct().order_by("-year")
     serializer_class = YearSerializer
+
+class GenreBookListAPIView(generics.ListAPIView):
+    serializer_class = BookSerializer
+
+    def get_queryset(self):
+        genre_slug = self.kwargs['slug']
+
+        genre = get_object_or_404(Genre, slug=genre_slug)
+        return Book.objects.filter(genres=genre)
+
+class AuthorBookListAPIView(generics.ListAPIView):
+    serializer_class = BookSerializer
+
+    def get_queryset(self):
+        author_slug = self.kwargs['slug']
+
+        author = get_object_or_404(Author, slug=author_slug)
+        return Book.objects.filter(authors=author)
+
+class YearBookListAPIView(generics.ListAPIView):
+    serializer_class = BookSerializer
+
+    def get_queryset(self):
+        year = self.kwargs['year']
+
+        return Book.objects.filter(year=year)
