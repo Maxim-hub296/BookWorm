@@ -1,10 +1,12 @@
+from ast import AugLoad
+
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework import generics
 from django.db.models import Q
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
@@ -103,9 +105,10 @@ class LogoutAPIView(APIView):
         request.user.auth_token.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class HelloAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+class AuthStatuAPIView(APIView):
+    permission_classes = [AllowAny]
 
     def get(self, request):
-        return Response({"message": f'Привет, {request.user.username}!'})
+        is_authenticated = request.user.is_authnticated
+        return Response({'is_authenticated': is_authenticated})
 

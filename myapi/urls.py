@@ -19,7 +19,7 @@ urlpatterns = [
     path('register/', views.RegistrationAPIView.as_view(), name='register'),
     path('login/', views.LoginAPIView.as_view(), name='login'),
     path('logout/', views.LogoutAPIView.as_view(), name='logout'),
-    path('hello/', views.HelloAPIView.as_view(), name='hello'),
+    path('auth-status/', views.AuthStatuAPIView.as_view(), name='hello'),
 
     path('api-auth/', include('rest_framework.urls',  namespace='rest_fram'))
 ]
