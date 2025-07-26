@@ -16,5 +16,10 @@ urlpatterns = [
     path('year/<int:year>/', views.YearBookListAPIView.as_view(), name='api-year'),
     path('search/', views.SearchBookListAPIView.as_view(), name='api-search'),
 
+    path('register/', views.RegistrationAPIView.as_view(), name='register'),
+    path('login/', views.LoginAPIView.as_view(), name='login'),
+    path('logout/', views.LogoutAPIView.as_view(), name='logout'),
+    path('hello/', views.HelloAPIView.as_view(), name='hello'),
+
     path('api-auth/', include('rest_framework.urls',  namespace='rest_fram'))
 ]

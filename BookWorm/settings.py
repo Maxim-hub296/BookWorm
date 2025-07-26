@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ["192.168.0.143", 'localhost', '127.0.0.1']
 INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
+    "rest_framework.authtoken",
     'myapi.apps.MyapiConfig',
     'authentication.apps.AuthenticationConfig',
     'shop.apps.ShopConfig',
@@ -86,6 +87,23 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    ),
+}
+
+
 
 
 # Password validation
