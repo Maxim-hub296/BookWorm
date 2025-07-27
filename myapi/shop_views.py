@@ -1,9 +1,9 @@
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework import viewsets
-
-from serializers import *
-
+from shop.models import Book, Author, Genre
+from .serializers import BookSerializer, AuthorSerializer, GenreSerializer, YearSerializer
 
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
