@@ -47,5 +47,8 @@ class AuthStatuAPIView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        is_authenticated = request.user.is_authnticated
-        return Response({'is_authenticated': is_authenticated})
+        is_authenticated = request.user.is_authenticated
+        username = request.user.username
+        print(is_authenticated)
+        print(username)
+        return Response({'is_authenticated': is_authenticated, 'username': username})
