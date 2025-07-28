@@ -26,6 +26,18 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         model = Comment
         fields = ['user', 'content']
 
+class CommentWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['content', 'book']  # user добавим вручную в view
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        return Comment.objects.create(user=user, **validated_data)
+
+
+
+
 
 class BookSerializer(serializers.ModelSerializer):
     authors = AuthorSerializer(many=True, read_only=True)
@@ -57,4 +69,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({
                 "username": "Пользователь с таким именем уже существует."
             })
+
+
 

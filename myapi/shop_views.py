@@ -2,8 +2,12 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework import viewsets
-from shop.models import Book, Author, Genre
-from .serializers import BookSerializer, AuthorSerializer, GenreSerializer, YearSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from shop.models import Book, Author, Genre, Comment
+from .serializers import BookSerializer, AuthorSerializer, GenreSerializer, YearSerializer, CommentWriteSerializer
 
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
@@ -62,3 +66,18 @@ class SearchBookListAPIView(generics.ListAPIView):
             ).distinct()
 
         return queryset
+
+
+class AddCommentAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = CommentWriteSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'is_created': True})
+        return Response(serializer.errors, status=400)
+
+
+
+

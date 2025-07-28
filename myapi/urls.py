@@ -20,7 +20,9 @@ urlpatterns = [
     path('register/', auth_views.RegistrationAPIView.as_view(), name='register'),
     path('login/', auth_views.LoginAPIView.as_view(), name='login'),
     path('logout/', auth_views.LogoutAPIView.as_view(), name='logout'),
-    path('auth-status/', auth_views.AuthStatuAPIView.as_view(), name='hello'),
+    path('auth-status/', auth_views.AuthStatuAPIView.as_view(), name='auth-status'),
+
+    path('add-comment/', shop_views.AddCommentAPIView.as_view(), name='add-comment'),
 
     path('api-auth/', include('rest_framework.urls',  namespace='rest_fram'))
 ]
