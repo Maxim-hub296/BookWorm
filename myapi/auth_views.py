@@ -19,7 +19,11 @@ class RegistrationAPIView(APIView):
             user = serializer.save()
             token = user.auth_token.key
             return Response({'token': token}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        errors = serializer.errors
+        first_error_filed = next(iter(errors))
+        first_error_message = errors[first_error_filed][0]
+        return Response({'error': first_error_message}, status.HTTP_400_BAD_REQUEST)
 
 
 class LoginAPIView(APIView):

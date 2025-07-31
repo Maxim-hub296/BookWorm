@@ -4,8 +4,8 @@ from rest_framework.authtoken.models import Token
 from shop.models import *
 from django.db import IntegrityError
 
-
 User = get_user_model()
+
 
 class AuthorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -26,6 +26,7 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         model = Comment
         fields = ['user', 'content']
 
+
 class CommentWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
@@ -34,9 +35,6 @@ class CommentWriteSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = self.context['request'].user
         return Comment.objects.create(user=user, **validated_data)
-
-
-
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -49,8 +47,10 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book
         fields = ('id', 'title', "authors", 'description', 'year', 'price', 'genres', 'slug', 'image', 'comments')
 
+
 class YearSerializer(serializers.Serializer):
     year = serializers.IntegerField()
+
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField()
@@ -60,15 +60,15 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ('username', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
+    def validate_username(self, value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("Имя пользователя уже занято")
+        return value
+
     def create(self, validated_data):
-        try:
-            user = User.objects.create_user(**validated_data)
-            Token.objects.create(user=user)  # Создаём токен
-            return user
-        except IntegrityError:
-            raise serializers.ValidationError({
-                "username": "Пользователь с таким именем уже существует."
-            })
-
-
-
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            password=validated_data['password']
+        )
+        Token.objects.create(user=user)
+        return user
