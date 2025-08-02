@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from .serializers import RegistrationSerializer
+from cart.models import Cart
 
 
 # Create your views here.
@@ -17,6 +18,7 @@ class RegistrationAPIView(APIView):
         if serializer.is_valid():
             user = serializer.save()
             token = user.auth_token.key
+            Cart.objects.create(user=user)
             return Response({'token': token}, status=status.HTTP_201_CREATED)
 
         errors = serializer.errors
@@ -48,6 +50,7 @@ class LogoutAPIView(APIView):
 
 class AuthStatuAPIView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes = []
 
     def get(self, request):
         is_authenticated = request.user.is_authenticated
