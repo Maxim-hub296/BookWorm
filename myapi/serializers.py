@@ -1,11 +1,13 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
+
+from cart.models import CartItem, Cart
 from shop.models import *
 from django.db import IntegrityError
 
-
 User = get_user_model()
+
 
 class AuthorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -26,6 +28,7 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         model = Comment
         fields = ['user', 'content']
 
+
 class CommentWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
@@ -34,9 +37,6 @@ class CommentWriteSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = self.context['request'].user
         return Comment.objects.create(user=user, **validated_data)
-
-
-
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -49,8 +49,10 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book
         fields = ('id', 'title', "authors", 'description', 'year', 'price', 'genres', 'slug', 'image', 'comments')
 
+
 class YearSerializer(serializers.Serializer):
     year = serializers.IntegerField()
+
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField()
@@ -71,4 +73,39 @@ class RegistrationSerializer(serializers.ModelSerializer):
             })
 
 
+class CartItemSerializer(serializers.ModelSerializer):
+    book = BookSerializer(read_only=True)
+    total_price = serializers.SerializerMethodField()
 
+    class Meta:
+        model = CartItem
+        fields = [
+            'id',
+            'book',
+            'quantity',
+            'total_price',
+        ]
+
+    def get_total_price(self, obj):
+        return obj.get_book_sum()
+
+
+class CartSerializer(serializers.ModelSerializer):
+    items = CartItemSerializer(many=True, read_only=True)
+    total_sum = serializers.SerializerMethodField()
+    total_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Cart
+        fields = [
+            'id',
+            'items',
+            'total_count',
+            'total_sum'
+        ]
+
+    def get_total_sum(self, obj):
+        return obj.get_sum()
+
+    def get_total_count(self, obj):
+        return obj.get_count_of_items()

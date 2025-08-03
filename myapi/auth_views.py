@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from .serializers import BookSerializer, AuthorSerializer, GenreSerializer, YearSerializer, RegistrationSerializer
+from cart.models import Cart
 
 
 # Create your views here.
@@ -17,8 +18,15 @@ class RegistrationAPIView(APIView):
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            token = user.auth_token.key
-            return Response({'token': token}, status=status.HTTP_201_CREATED)
+
+            # Создаём или получаем токен
+            token, _ = Token.objects.get_or_create(user=user)
+
+            # Создаём корзину, если её ещё нет
+            Cart.objects.get_or_create(user=user)
+
+            return Response({'token': token.key}, status=status.HTTP_201_CREATED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

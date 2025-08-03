@@ -2,13 +2,13 @@ from django.urls import include, path
 from rest_framework import routers
 from . import auth_views
 from . import shop_views
+from .cart_views import CartDetailAPIView, AddToCartAPIView, RemoveFromCartAPIView
 
 router = routers.DefaultRouter()
 router.register(r'books', shop_views.BookViewSet, basename='book')
 router.register(r'authors', shop_views.AuthorsViewSet)
 router.register(r'genres', shop_views.GenresViewSet)
 router.register(r'years', shop_views.YearViewSet, basename='year')
-
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -24,5 +24,9 @@ urlpatterns = [
 
     path('add-comment/', shop_views.AddCommentAPIView.as_view(), name='add-comment'),
 
-    path('api-auth/', include('rest_framework.urls',  namespace='rest_fram'))
+    path('cart/', CartDetailAPIView.as_view(), name='cart'),
+    path('cart-add/', AddToCartAPIView.as_view(), name='cart-add'),
+    path('cart-remove', RemoveFromCartAPIView.as_view(), name='cart-remove'),
+
+    path('api-auth/', include('rest_framework.urls', namespace='rest_fram'))
 ]
