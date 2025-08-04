@@ -1,4 +1,5 @@
 import git
+from django.http import JsonResponse
 from django.views.generic import ListView, DetailView
 from shop.forms import AddCommentForm
 from shop.models import Book, Genre, Comment, Author
@@ -172,5 +173,5 @@ def git_update(request):
 
         origin.pull()
 
-        return
+        return JsonResponse({'status': 'ok'})
 
