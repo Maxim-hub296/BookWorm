@@ -1,3 +1,4 @@
+import git
 from django.views.generic import ListView, DetailView
 from shop.forms import AddCommentForm
 from shop.models import Book, Genre, Comment, Author
@@ -162,3 +163,14 @@ def add_comment(request, slug):
 
     # Всегда редиректим обратно на страницу книги
     return redirect('shop:book_detail', slug=slug)
+
+
+def git_update(request):
+    if request.method == 'POST':
+        repo = git.Repo('https://github.com/Maxim-hub296/BookWorm')
+        origin = repo.remotes.origin
+
+        origin.pull()
+
+        return
+
