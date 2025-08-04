@@ -2,67 +2,74 @@
 
 {% block content %}
 
-    {% include "inc/search.html" %}
+    {% include 'inc/search.html' %}
     <div class="container">
-
         <div class="container">
 
             <!-- Заголовок и кнопка случайной книги -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="my-4">Все книги</h1>
-                {% if random_book %}
-                    <a href="{% url 'shop:book_detail' random_book.slug %}"
-                       class="btn btn-primary d-flex align-items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                             class="bi bi-shuffle me-2" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                  d="M0 3.5A.5.5 0 0 1 .5 3H1c2.202 0 3.827 1.24 4.874 2.418.49.552.865 1.102 1.126 1.532.26-.43.636-.98 1.126-1.532C9.173 4.24 10.798 3 13 3v1c-1.798 0-3.173 1.01-4.126 2.082A9.624 9.624 0 0 0 7.5 8.503V9H8a.5.5 0 0 1 0 1H7.5v1a.5.5 0 0 1-1 0v-1H6a.5.5 0 0 1 0-1h.5v-.497c-.26-.43-.636-.98-1.126-1.532C4.173 5.01 2.798 4 1 4h-.5a.5.5 0 0 1-.5-.5z"/>
-                            <path d="M13 5.466V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192zm0 9v-3.932a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192z"/>
-                        </svg>
-                        Случайная книга
-                    </a>
-                {% endif %}
+                <!-- Группируем вместе -->
+                <div class="d-flex align-items-center">
+                    {% if random_book %}
+                        <a href="{% url 'shop:book_detail' random_book.slug %}"
+                           class="btn btn-primary d-flex align-items-center">
+                            <!-- SVG shuffle -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-shuffle me-2" viewBox="0 0 16 16">
+                                <!-- ... -->
+                            </svg>
+                            Случайная книга
+                        </a>
+                    {% endif %}
+
+                    <!-- Отступ слева от “Случайная книга” -->
+                    <div class="d-lg-none ms-2">
+                        <button class="btn btn-outline-primary btn-sm w-auto" type="button"
+                                data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar"
+                                aria-controls="mobileSidebar" aria-label="Открыть фильтры">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                 fill="currentColor" class="bi bi-list me-1" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M2.5 12.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11zm0-4a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11zm0-4a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11z"/>
+                            </svg>
+                            Фильтры
+                        </button>
+                    </div>
+                </div>
             </div>
+
             <div class="row">
-                <!-- Основной контент - список книг -->
+                <!-- Основной контент – список книг -->
                 <div class="col-lg-9 order-lg-1 order-2">
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                         {% for book in book_list %}
-                            <div class="col book-item" data-book-id="{{ book.id }}">
-                                <a href="{% url 'shop:book_detail' book.slug %}" class="text-decoration-none text-dark">
-                                    <div class="card h-100 shadow-sm position-relative">
-                                        {% if book.image %}
-                                            <img src="{{ book.image.url }}"
-                                                 class="card-img-top book-cover"
-                                                 alt="Обложка книги {{ book.title }}">
-                                        {% else %}
-                                            <div class="text-center py-5 bg-light">
-                                                <i class="bi bi-book fs-1 text-muted"></i>
-                                                <p class="mt-2">Нет обложки</p>
-                                            </div>
-                                        {% endif %}
-
-                                        <div class="card-body">
-                                            <h5 class="card-title">
-                                                {{ book.title }}
-                                            </h5>
-
-                                            <div class="mt-3">
-                                                <span class="fs-5 fw-bold">{{ book.price }} руб.</span>
-                                            </div>
-
-                                            <!-- Невидимая ссылка для растягивания всей карточки -->
-                                            <span class="stretched-link"></span>
+                            <div class="col book-item"
+                                 data-book-id="{{ book.id }}"
+                                 data-detail-url="{% url 'shop:book_detail' book.slug %}">
+                                <div class="card h-100 shadow-sm">
+                                    {% if book.image %}
+                                        <img src="{{ book.image.url }}"
+                                             class="card-img-top book-cover"
+                                             alt="Обложка книги {{ book.title }}">
+                                    {% else %}
+                                        <div class="text-center py-5 bg-light">
+                                            <i class="bi bi-book fs-1 text-muted"></i>
+                                            <p class="mt-2">Нет обложки</p>
                                         </div>
-
-                                        <div class="card-footer bg-transparent border-0 pb-3 to-cart-btn">
-                                            <button class="btn btn-primary w-100" type="button"
-                                                    onclick="event.stopPropagation(); event.preventDefault();">
-                                                В корзину
-                                            </button>
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-0">{{ book.title }}</h5>
+                                        <div class="mt-3">
+                                            <span class="fs-5 fw-bold">{{ book.price }} руб.</span>
                                         </div>
                                     </div>
-                                </a>
+                                    <div class="card-footer bg-transparent border-0 pb-3 to-cart-btn">
+                                        <button class="btn btn-primary w-100" type="button">
+                                            В корзину
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         {% empty %}
                             <div class="col-12">
@@ -82,24 +89,29 @@
                                         <a class="page-link" href="?page=1">Первая</a>
                                     </li>
                                     <li class="page-item">
-                                        <a class="page-link"
-                                           href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                                            Предыдущая
+                                        </a>
                                     </li>
                                 {% endif %}
 
                                 <li class="page-item active">
-                        <span class="page-link">
-                            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
-                        </span>
+                                    <span class="page-link">
+                                        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                                    </span>
                                 </li>
 
                                 {% if page_obj.has_next %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                                            Следующая
+                                        </a>
                                     </li>
                                     <li class="page-item">
                                         <a class="page-link"
-                                           href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+                                           href="?page={{ page_obj.paginator.num_pages }}">
+                                            Последняя
+                                        </a>
                                     </li>
                                 {% endif %}
                             </ul>
@@ -107,8 +119,21 @@
                     {% endif %}
                 </div>
 
-                <!-- Сайдбар с фильтрами -->
-                <div class="col-lg-3 order-lg-2 order-1 mb-4 mb-lg-0">
+                <!-- Offcanvas для мобилок -->
+                <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar"
+                     aria-labelledby="mobileSidebarLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="mobileSidebarLabel">Фильтры</h5>
+                        <button type="button" class="btn-close text-reset"
+                                data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        {% include 'inc/sidebar.html' %}
+                    </div>
+                </div>
+
+                <!-- Десктопный сайдбар -->
+                <div class="col-lg-3 d-none d-lg-block order-lg-2 order-1 mb-4 mb-lg-0">
                     <div class="sidebar-sticky">
                         {% include 'inc/sidebar.html' %}
                     </div>
@@ -116,16 +141,52 @@
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const toCartButtons = document.querySelectorAll('.to-cart-btn');
-            toCartButtons.forEach(button => {
-                button.addEventListener('click', function (e) {
-                    e.preventDefault();
 
-                    const row = this.closest('.book-item');
+
+    {# Контейнер для toast-уведомлений #}
+    <div id="toast-container"></div>
+
+    <script>
+        function showToast(message, type = 'success', duration = 3000) {
+            const toastContainer = document.getElementById('toast-container');
+
+            const toast = document.createElement('div');
+            toast.className = 'toast-message';
+            if (type === 'error') {
+                toast.classList.add('error');
+            }
+            toast.innerText = message;
+
+            toastContainer.appendChild(toast);
+
+            // Плавное появление
+            setTimeout(() => toast.classList.add('show'), 10);
+
+            // Плавное исчезновение
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1) Перенаправление при клике на карточку
+            document.querySelectorAll('.book-item').forEach(item => {
+                item.addEventListener('click', e => {
+                    if (e.target.closest('button')) return;
+                    const url = item.getAttribute('data-detail-url');
+                    window.location.href = url;
+                });
+            });
+
+            // 2) Логика «добавить в корзину»
+            document.querySelectorAll('.to-cart-btn button').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const row = btn.closest('.book-item');
                     const bookId = row.getAttribute('data-book-id');
-                    const quantity = 1;
                     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
                     fetch('/cart/add/', {
@@ -134,21 +195,49 @@
                             'Content-Type': 'application/x-www-form-urlencoded',
                             'X-CSRFToken': csrfToken
                         },
-                        body: `book_id=${bookId}&quantity=${quantity}`
+                        body: `book_id=${bookId}&quantity=1`
                     })
-                        .then(response => {
-                            if (response.ok) {
-                                alert('Товар добавлен в корзину');
-                            } else {
-                                alert('Ошибка при добавлении в корзину');
-                            }
-                        })
-
-
-                })
-            })
-        })
-
+                        .then(r => {
+                            if (r.ok) showToast('Товар добавлен в корзину', 'success');
+                            else showToast('Ошибка при добавлении', 'error');
+                        });
+                });
+            });
+        });
     </script>
+
+    <style>
+        /* Центрированный снизу toast */
+        #toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1055;
+        }
+
+        .toast-message {
+            display: inline-block;
+            background-color: #198754;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 14px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .toast-message.error {
+            background-color: #dc3545;
+        }
+
+        .toast-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 
 {% endblock %}
