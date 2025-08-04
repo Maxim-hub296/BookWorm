@@ -14,7 +14,7 @@ urlpatterns = [
     path('book/<slug:slug>/add_comment/', views.add_comment, name='add_comment'),
     path('search/', views.BookSearchView.as_view(), name='search'),
     path('git-upd/', views.git_update, name='git-update'),
-    path('test', views.test, name='test')
+
 
 ]
 
