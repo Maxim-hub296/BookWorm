@@ -175,3 +175,6 @@ def git_update(request):
 
         return JsonResponse({'status': 'ok'})
 
+
+def test(request):
+    return JsonResponse({'status': 'работает'})
