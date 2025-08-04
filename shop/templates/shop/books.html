@@ -9,25 +9,27 @@
             <!-- Заголовок и кнопка случайной книги -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="my-4">Все книги</h1>
-                <!-- Группируем вместе -->
+
                 <div class="d-flex align-items-center">
                     {% if random_book %}
                         <a href="{% url 'shop:book_detail' random_book.slug %}"
-                           class="btn btn-primary d-flex align-items-center">
+                           class="btn btn-primary btn-sm w-auto d-flex align-items-center me-2">
                             <!-- SVG shuffle -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="bi bi-shuffle me-2" viewBox="0 0 16 16">
-                                <!-- ... -->
+                                 class="bi bi-shuffle me-1" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M0 3.5A.5.5 0 0 1 .5 3H1c2.202 0 3.827 1.24 4.874 2.418.49.552.865 1.102 1.126 1.532.26-.43.636-.98 1.126-1.532C9.173 4.24 10.798 3 13 3v1c-1.798 0-3.173 1.01-4.126 2.082A9.624 9.624 0 0 0 7.5 8.503V9H8a.5.5 0 0 1 0 1H7.5v1a.5.5 0 0 1-1 0v-1H6a.5.5 0 0 1 0-1h.5v-.497c-.26-.43-.636-.98-1.126-1.532C4.1735.01 2.798 4 1 4h-.5a.5.5 0 0 1-.5-.5z"/>
+                                <path d="M13 5.466V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192zm0 9v-3.932a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192z"/>
                             </svg>
                             Случайная книга
                         </a>
                     {% endif %}
 
-                    <!-- Отступ слева от “Случайная книга” -->
-                    <div class="d-lg-none ms-2">
+                    <div class="d-lg-none">
                         <button class="btn btn-outline-primary btn-sm w-auto" type="button"
                                 data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar"
                                 aria-controls="mobileSidebar" aria-label="Открыть фильтры">
+                            <!-- SVG list -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                  fill="currentColor" class="bi bi-list me-1" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd"
@@ -142,69 +144,44 @@
         </div>
     </div>
 
-
     {# Контейнер для toast-уведомлений #}
     <div id="toast-container"></div>
 
     <script>
-        function showToast(message, type = 'success', duration = 3000) {
-            const toastContainer = document.getElementById('toast-container');
+        document.querySelectorAll('.to-cart-btn button').forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.preventDefault();
+                e.stopPropagation();
 
-            const toast = document.createElement('div');
-            toast.className = 'toast-message';
-            if (type === 'error') {
-                toast.classList.add('error');
-            }
-            toast.innerText = message;
+                // Визуальный отклик
+                btn.classList.add('btn-press');
+                setTimeout(() => {
+                    btn.classList.remove('btn-press');
+                    btn.blur();              // снимаем фокус, если он остался
+                }, 150);
 
-            toastContainer.appendChild(toast);
+                // Ваш fetch…
+                const row = btn.closest('.book-item');
+                const bookId = row.getAttribute('data-book-id');
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-            // Плавное появление
-            setTimeout(() => toast.classList.add('show'), 10);
-
-            // Плавное исчезновение
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, duration);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // 1) Перенаправление при клике на карточку
-            document.querySelectorAll('.book-item').forEach(item => {
-                item.addEventListener('click', e => {
-                    if (e.target.closest('button')) return;
-                    const url = item.getAttribute('data-detail-url');
-                    window.location.href = url;
-                });
-            });
-
-            // 2) Логика «добавить в корзину»
-            document.querySelectorAll('.to-cart-btn button').forEach(btn => {
-                btn.addEventListener('click', e => {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    const row = btn.closest('.book-item');
-                    const bookId = row.getAttribute('data-book-id');
-                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-                    fetch('/cart/add/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            'X-CSRFToken': csrfToken
-                        },
-                        body: `book_id=${bookId}&quantity=1`
-                    })
-                        .then(r => {
-                            if (r.ok) showToast('Товар добавлен в корзину', 'success');
-                            else showToast('Ошибка при добавлении', 'error');
-                        });
-                });
+                fetch('/cart/add/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: `book_id=${bookId}&quantity=1`
+                })
+                    .then(r => {
+                        if (r.ok) showToast('Товар добавлен в корзину', 'success');
+                        else showToast('Ошибка при добавлении', 'error');
+                    });
             });
         });
+
     </script>
+
 
     <style>
         /* Центрированный снизу toast */
@@ -214,6 +191,10 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 1055;
+        }
+
+        .btn-press {
+            filter: brightness(85%);
         }
 
         .toast-message {
@@ -228,6 +209,7 @@
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.3s ease-in-out;
+            margin-bottom: 10px;
         }
 
         .toast-message.error {
