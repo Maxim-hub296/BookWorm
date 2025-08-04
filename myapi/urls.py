@@ -26,7 +26,7 @@ urlpatterns = [
 
     path('cart/', CartDetailAPIView.as_view(), name='cart'),
     path('cart-add/', AddToCartAPIView.as_view(), name='cart-add'),
-    path('cart-remove', RemoveFromCartAPIView.as_view(), name='cart-remove'),
+    path('cart-remove/', RemoveFromCartAPIView.as_view(), name='cart-remove'),
 
     path('api-auth/', include('rest_framework.urls', namespace='rest_fram'))
 ]
