@@ -29,37 +29,40 @@
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                         {% for book in book_list %}
                             <div class="col book-item" data-book-id="{{ book.id }}">
-                                <div class="card h-100 shadow-sm">
-                                    {% if book.image %}
-                                        <img src="{{ book.image.url }}"
-                                             class="card-img-top book-cover"
-                                             alt="Обложка книги {{ book.title }}">
-                                    {% else %}
-                                        <div class="text-center py-5 bg-light">
-                                            <i class="bi bi-book fs-1 text-muted"></i>
-                                            <p class="mt-2">Нет обложки</p>
-                                        </div>
-                                    {% endif %}
+                                <a href="{% url 'shop:book_detail' book.slug %}" class="text-decoration-none text-dark">
+                                    <div class="card h-100 shadow-sm position-relative">
+                                        {% if book.image %}
+                                            <img src="{{ book.image.url }}"
+                                                 class="card-img-top book-cover"
+                                                 alt="Обложка книги {{ book.title }}">
+                                        {% else %}
+                                            <div class="text-center py-5 bg-light">
+                                                <i class="bi bi-book fs-1 text-muted"></i>
+                                                <p class="mt-2">Нет обложки</p>
+                                            </div>
+                                        {% endif %}
 
-                                    <div class="card-body">
-                                        <h5 class="card-title">
-                                            <a href="{% url 'shop:book_detail' book.slug %}"
-                                               class="text-decoration-none text-dark">
+                                        <div class="card-body">
+                                            <h5 class="card-title">
                                                 {{ book.title }}
-                                            </a>
-                                        </h5>
+                                            </h5>
 
-                                        <div class="mt-3">
-                                            <span class="fs-5 fw-bold">{{ book.price }} руб.</span>
+                                            <div class="mt-3">
+                                                <span class="fs-5 fw-bold">{{ book.price }} руб.</span>
+                                            </div>
+
+                                            <!-- Невидимая ссылка для растягивания всей карточки -->
+                                            <span class="stretched-link"></span>
+                                        </div>
+
+                                        <div class="card-footer bg-transparent border-0 pb-3 to-cart-btn">
+                                            <button class="btn btn-primary w-100" type="button"
+                                                    onclick="event.stopPropagation(); event.preventDefault();">
+                                                В корзину
+                                            </button>
                                         </div>
                                     </div>
-
-                                    <div class="card-footer bg-transparent border-0 pb-3 to-cart-btn">
-                                        <button class="btn btn-primary w-100">
-                                            В корзину
-                                        </button>
-                                    </div>
-                                </div>
+                                </a>
                             </div>
                         {% empty %}
                             <div class="col-12">
