@@ -124,7 +124,7 @@
                 <!-- Offcanvas для мобилок -->
                 <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar"
                      aria-labelledby="mobileSidebarLabel">
-                    <div class="offcanvas-header">
+                    <div class="offcanvas-header">  
                         <h5 class="offcanvas-title" id="mobileSidebarLabel">Фильтры</h5>
                         <button type="button" class="btn-close text-reset"
                                 data-bs-dismiss="offcanvas" aria-label="Закрыть"></button>
@@ -148,6 +148,32 @@
     <div id="toast-container"></div>
 
     <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Функция показа тоста
+        function showToast(message, type = 'success', duration = 3000) {
+            const toastContainer = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast-message';
+            if (type === 'error') toast.classList.add('error');
+            toast.innerText = message;
+            toastContainer.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        // 1) Перенаправление при клике на карточку
+        document.querySelectorAll('.book-item').forEach(item => {
+            item.addEventListener('click', e => {
+                if (e.target.closest('button')) return;
+                const url = item.getAttribute('data-detail-url');
+                window.location.href = url;
+            });
+        });
+
+        // 2) Логика «добавить в корзину» с визуальным откликом
         document.querySelectorAll('.to-cart-btn button').forEach(btn => {
             btn.addEventListener('click', e => {
                 e.preventDefault();
@@ -157,14 +183,13 @@
                 btn.classList.add('btn-press');
                 setTimeout(() => {
                     btn.classList.remove('btn-press');
-                    btn.blur();              // снимаем фокус, если он остался
+                    btn.blur();
                 }, 150);
 
-                // Ваш fetch…
+                // Отправка на сервер
                 const row = btn.closest('.book-item');
                 const bookId = row.getAttribute('data-book-id');
                 const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
                 fetch('/cart/add/', {
                     method: 'POST',
                     headers: {
@@ -173,15 +198,14 @@
                     },
                     body: `book_id=${bookId}&quantity=1`
                 })
-                    .then(r => {
-                        if (r.ok) showToast('Товар добавлен в корзину', 'success');
-                        else showToast('Ошибка при добавлении', 'error');
-                    });
+                .then(r => {
+                    if (r.ok) showToast('Товар добавлен в корзину', 'success');
+                    else      showToast('Ошибка при добавлении', 'error');
+                });
             });
         });
-
+    });
     </script>
-
 
     <style>
         /* Центрированный снизу toast */
@@ -192,11 +216,9 @@
             transform: translateX(-50%);
             z-index: 1055;
         }
-
         .btn-press {
             filter: brightness(85%);
         }
-
         .toast-message {
             display: inline-block;
             background-color: #198754;
@@ -211,11 +233,9 @@
             transition: all 0.3s ease-in-out;
             margin-bottom: 10px;
         }
-
         .toast-message.error {
             background-color: #dc3545;
         }
-
         .toast-message.show {
             opacity: 1;
             transform: translateY(0);
