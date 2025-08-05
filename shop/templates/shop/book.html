@@ -68,7 +68,9 @@
                                        max="99">
                                 <button type="button" class="btn btn-outline-secondary px-3 py-1" id="plus">+</button>
                             </div>
-                            <button type="submit" class="btn btn-outline-secondary px-3 py-1" id="button-submit">В корзину</button>
+                            <button type="submit" class="btn btn-outline-secondary px-3 py-1" id="button-submit">В
+                                корзину
+                            </button>
                         </form>
 
 
@@ -92,7 +94,7 @@
                                          style="width: 40px; height: 40px;">
                                         <i class="bi bi-person-fill text-light"></i>
                                     </div>
-
+                                    <strong class="ms-2">{{ comment.user.username }}</strong>
                                 </div>
                                 <p class="mb-0">{{ comment.content }}</p>
                             </div>
@@ -110,43 +112,42 @@
         </div>
     </div>
 
-    <div id="toast-container"></div>
+        <div id="toast-container"></div>
 
-    <style>
-        /* Кастомные стили для страницы книги */
-        .card {
-            border: 1px solid var(--card-border);
-            background-color: var(--card-background);
-        }
+        <style>
+            /* Кастомные стили для страницы книги */
+            .card {
+                border: 1px solid var(--card-border);
+                background-color: var(--card-background);
+            }
 
-        .card-header {
-            background-color: var(--navbar-background);
-            color: var(--navbar-link-text);
-        }
+            .card-header {
+                background-color: var(--navbar-background);
+                color: var(--navbar-link-text);
+            }
 
-        .btn-primary {
-            background-color: var(--button-background);
-            border-color: var(--button-background);
-            color: var(--button-text);
-        }
+            .btn-primary {
+                background-color: var(--button-background);
+                border-color: var(--button-background);
+                color: var(--button-text);
+            }
 
-        .btn-primary:hover {
-            background-color: var(--button-hover-background);
-            border-color: var(--button-hover-background);
-        }
+            .btn-primary:hover {
+                background-color: var(--button-hover-background);
+                border-color: var(--button-hover-background);
+            }
 
-        .border-top {
-            border-top: 1px solid var(--card-border) !important;
-        }
+            .border-top {
+                border-top: 1px solid var(--card-border) !important;
+            }
 
-        .border-bottom {
-            border-bottom: 1px solid var(--card-border) !important;
-        }
-    </style>
+            .border-bottom {
+                border-bottom: 1px solid var(--card-border) !important;
+            }
+        </style>
 
 
-
-    <script src="{% static 'cart/js/add_to_cart.js' %}?v=9999"></script>
+        <script src="{% static 'cart/js/add_to_cart.js' %}?v=9999"></script>
 
 
 {% endblock %}
