@@ -26,3 +26,5 @@ env/
 
 # Системные файлы
 .DS_Store
+
+BookWorm/settings.py

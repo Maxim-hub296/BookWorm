@@ -8,7 +8,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
 class Cart(models.Model):
-    user = OneToOneField(User, null=True,on_delete=models.SET_NULL)
+    user = OneToOneField(User, null=True, on_delete=models.SET_NULL)
 
     def add_item(self, book, quantity=1):
         cart_item, created = CartItem.objects.get_or_create(
@@ -18,11 +18,11 @@ class Cart(models.Model):
         )
 
         if not created:
-            if int(quantity) >= 1:
-                cart_item.quantity += int(quantity)
-                cart_item.save()
+            cart_item.quantity += int(quantity)
+            if cart_item.quantity <= 0:
+                cart_item.delete()
             else:
-                cart_item.quantity -= int(quantity)
+                cart_item.save()
 
     def remove_item(self, book):
         CartItem.objects.filter(cart=self, book=book).delete()
