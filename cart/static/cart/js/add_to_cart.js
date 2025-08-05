@@ -1,67 +1,60 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // 0) Если контейнера для тостов нет в DOM — добавляем его
+    // 0) Если контейнера для тостов нет — создаём его
     if (!document.getElementById('toast-container')) {
         const container = document.createElement('div');
         container.id = 'toast-container';
-        // стили контейнера можно положить в CSS или прописать здесь
-        container.style.position = 'fixed';
-        container.style.bottom = '30px';
-        container.style.left = '50%';
-        container.style.transform = 'translateX(-50%)';
-        container.style.zIndex = '1055';
+        Object.assign(container.style, {
+            position: 'fixed',
+            bottom: '30px',            // отступ от низа
+            left: '50%',               // центр по горизонтали
+            transform: 'translateX(-50%)', // учёт ширины контейнера
+            zIndex: '1055',
+            pointerEvents: 'none'      // чтобы клики проходили сквозь
+        });
         document.body.appendChild(container);
     }
 
-    // 1) Функция показа тоста
+    // Функция показа тоста
     function showToast(message, type = 'success', duration = 3000) {
         const toastContainer = document.getElementById('toast-container');
-
         const toast = document.createElement('div');
         toast.className = 'toast-message';
-        // яркие bootstrap-классы через стили в CSS
-        if (type === 'error') {
-            toast.classList.add('error');
-        }
+        if (type === 'error') toast.classList.add('error');
         toast.innerText = message;
-
         toastContainer.appendChild(toast);
-
-        // Плавное появление
+        // плавное появление
         setTimeout(() => toast.classList.add('show'), 10);
-
-        // Скрываем через duration
+        // скрытие
         setTimeout(() => {
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 300);
         }, duration);
     }
 
-    // 2) Обработчики «−» / «+» с уведомлениями на границах
+    // Обработчики «−» / «+» с тостами на границах
     document.getElementById('minus').addEventListener('click', function () {
-        const quantityInput = document.getElementById('quantity');
-        let value = parseInt(quantityInput.value, 10);
-        if (value > 1) {
-            quantityInput.value = value - 1;
+        const input = document.getElementById('quantity');
+        let v = parseInt(input.value, 10) || 1;
+        if (v > 1) {
+            input.value = v - 1;
         } else {
             showToast('Мин. количество — 1', 'error');
         }
     });
-
     document.getElementById('plus').addEventListener('click', function () {
-        const quantityInput = document.getElementById('quantity');
-        let value = parseInt(quantityInput.value, 10);
-        if (value < 99) {
-            quantityInput.value = value + 1;
+        const input = document.getElementById('quantity');
+        let v = parseInt(input.value, 10) || 1;
+        if (v < 99) {
+            input.value = v + 1;
         } else {
             showToast('Максимум — 99 шт.', 'error');
         }
     });
 
-    // 3) Отправка формы «Добавить в корзину»
+    // Отправка формы «В корзину» с тостами вместо alert
     const form = document.getElementById('cart-form');
     form.addEventListener('submit', function (e) {
         e.preventDefault();
-
         const bookId = document.getElementById('book-id').value;
         const quantity = document.getElementById('quantity').value;
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -76,14 +69,14 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => {
             if (response.ok) {
-                showToast("Товар добавлен в корзину", 'success');
+                showToast('Товар добавлен в корзину', 'success');
             } else {
-                showToast("Ошибка при добавлении товара", 'error');
+                showToast('Ошибка при добавлении товара', 'error');
             }
         })
-        .catch(error => {
-            console.error("Ошибка: ", error);
-            showToast("Не удалось добавить в корзину", 'error');
+        .catch(err => {
+            console.error('Ошибка:', err);
+            showToast('Не удалось добавить в корзину', 'error');
         });
     });
 });

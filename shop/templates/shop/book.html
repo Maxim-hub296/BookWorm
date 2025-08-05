@@ -112,42 +112,93 @@
         </div>
     </div>
 
-        <div id="toast-container"></div>
+    <div id="toast-container"></div>
 
-        <style>
-            /* Кастомные стили для страницы книги */
-            .card {
-                border: 1px solid var(--card-border);
-                background-color: var(--card-background);
-            }
+    <style>
 
-            .card-header {
-                background-color: var(--navbar-background);
-                color: var(--navbar-link-text);
-            }
+        .toast-message {
+            display: inline-block;
+            background-color: #198754;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+            pointer-events: auto;
+        }
 
-            .btn-primary {
-                background-color: var(--button-background);
-                border-color: var(--button-background);
-                color: var(--button-text);
-            }
+        .toast-message.error {
+            background-color: #dc3545;
+        }
 
-            .btn-primary:hover {
-                background-color: var(--button-hover-background);
-                border-color: var(--button-hover-background);
-            }
-
-            .border-top {
-                border-top: 1px solid var(--card-border) !important;
-            }
-
-            .border-bottom {
-                border-bottom: 1px solid var(--card-border) !important;
-            }
-        </style>
+        .toast-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
 
-        <script src="{% static 'cart/js/add_to_cart.js' %}?v=9999"></script>
+        #toast-container { /* уже создаётся в JS */
+        }
+
+        .toast-message {
+            display: inline-block;
+            background-color: #198754;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+        }
+
+        .toast-message.error {
+            background-color: #dc3545;
+        }
+
+        .toast-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        /* Кастомные стили для страницы книги */
+        .card {
+            border: 1px solid var(--card-border);
+            background-color: var(--card-background);
+        }
+
+        .card-header {
+            background-color: var(--navbar-background);
+            color: var(--navbar-link-text);
+        }
+
+        .btn-primary {
+            background-color: var(--button-background);
+            border-color: var(--button-background);
+            color: var(--button-text);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-hover-background);
+            border-color: var(--button-hover-background);
+        }
+
+        .border-top {
+            border-top: 1px solid var(--card-border) !important;
+        }
+
+        .border-bottom {
+            border-bottom: 1px solid var(--card-border) !important;
+        }
+    </style>
+
+
+    <script src="{% static 'cart/js/add_to_cart.js' %}?v=9999"></script>
 
 
 {% endblock %}
