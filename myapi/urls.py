@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework import routers
 from . import auth_views
 from . import shop_views
-from .cart_views import CartDetailAPIView, AddToCartAPIView, RemoveFromCartAPIView
+from .cart_views import CartDetailAPIView, AddToCartAPIView, RemoveFromCartAPIView, UpdateCartItemAPIView
 
 router = routers.DefaultRouter()
 router.register(r'books', shop_views.BookViewSet, basename='book')
@@ -27,6 +27,7 @@ urlpatterns = [
     path('cart/', CartDetailAPIView.as_view(), name='cart'),
     path('cart-add/', AddToCartAPIView.as_view(), name='cart-add'),
     path('cart-remove/', RemoveFromCartAPIView.as_view(), name='cart-remove'),
+    path('cart-update/', UpdateCartItemAPIView.as_view(), name='cart-update'),
 
     path('api-auth/', include('rest_framework.urls', namespace='rest_fram'))
 ]

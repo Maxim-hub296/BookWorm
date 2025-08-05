@@ -8,6 +8,7 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from shop.models import Book
 
+
 class CartDetailAPIView(generics.RetrieveAPIView):
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated]
@@ -46,3 +47,34 @@ class RemoveFromCartAPIView(APIView):
 
         return Response({'status': 'ok'}, status=status.HTTP_200_OK)
 
+
+class UpdateCartItemAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        book_id = request.data.get("book_id")
+        action = request.data.get("action")
+
+        if not book_id or not action:
+            return Response({"error": "book_id и action обязательны"}, status=status.HTTP_400_BAD_REQUEST)
+
+        cart = Cart.objects.get(user=request.user)
+        book = get_object_or_404(Book, pk=book_id)
+        cart_item = get_object_or_404(CartItem, cart=cart, book=book)
+
+        if action == "increase" and cart_item.quantity < 99:
+            cart_item.quantity += 1
+        elif action == "decrease" and cart_item.quantity > 1:
+            cart_item.quantity -= 1
+        else:
+            return Response({"error": "Некорректное действие или количество вне допустимого диапазона"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        cart_item.save()
+
+        return Response({
+            "new_quantity": cart_item.quantity,
+            "item_total": cart_item.get_book_sum(),
+            "cart_total": cart.get_sum(),
+            "items_total": cart.get_count_of_items()
+        }, status=status.HTTP_200_OK)
