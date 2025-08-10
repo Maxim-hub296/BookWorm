@@ -14,8 +14,11 @@ BookWorm — это онлайн-платформа для покупки кни
 🛠 Технологии
 Backend:
   Python 3.10
+  
   Django 4.x
+  
   Django REST Framework
+  
   SQLite / MySQL
 Хостинг:
   PythonAnywhere
