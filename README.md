@@ -21,5 +21,7 @@ Backend:
   Django REST Framework
   
   SQLite / MySQL
+
 Хостинг:
+
   PythonAnywhere
